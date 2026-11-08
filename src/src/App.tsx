@@ -1,0 +1,1 @@
+onGetStartedClick={() => { location.hash = 'register'; }}
