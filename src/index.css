@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+  h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif; }
+}
+
+html[lang='ar'] body,
+html[lang='ar'] h1, html[lang='ar'] h2, html[lang='ar'] h3,
+html[lang='ar'] h4, html[lang='ar'] h5, html[lang='ar'] h6 {
+  font-family: 'Noto Kufi Arabic', 'Plus Jakarta Sans', system-ui, sans-serif;
+}
