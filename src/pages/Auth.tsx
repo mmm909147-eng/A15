@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { sb, inp, btn } from '../lib/app';
+import { sb, card, inp, btn } from '../lib/app';
 
 const FIELDS = [
   ['first_name', 'First name'], ['last_name', 'Last name'], ['phone', 'Phone number', 'tel'],
@@ -26,7 +26,7 @@ export function Auth({ mode }: { mode: 'login' | 'register' }) {
   };
 
   return (
-    <form onSubmit={submit} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 mx-auto my-10 grid max-w-xl gap-3 sm:grid-cols-2">
+    <form onSubmit={submit} className={`${card} mx-auto my-10 grid max-w-xl gap-3 sm:grid-cols-2`}>
       <h2 className="text-xl font-bold sm:col-span-2">{mode === 'login' ? 'Sign in' : 'Create your account'}</h2>
       {fields.map(([k, label, type]) => (
         <label key={k} className="text-xs font-semibold uppercase">
