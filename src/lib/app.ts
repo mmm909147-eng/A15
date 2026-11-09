@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 
 const url = import.meta.env.VITE_SUPABASE_URL;
@@ -6,8 +7,30 @@ const key = import.meta.env.VITE_SUPABASE_ANON_KEY;
 export const configured = Boolean(url && key);
 export const sb = createClient(url || 'http://localhost', key || 'missing');
 
-export const card = "bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xl border border-gray-100";
-export const inp = "w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition";
-export const btn = "w-full rounded-xl bg-black px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition hover:bg-gray-800 active:scale-[0.98]";
-export const notify = (msg: string) => alert(msg);
-export const useAuth = () => ({ user: null });
+export const card = 'rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900';
+export const inp = 'w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-sm dark:border-slate-600';
+export const btn = 'rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white dark:bg-white dark:text-slate-900 cursor-pointer';
+
+export async function notify(orderId: string, kind: 'placed' | 'status') {
+  const { data } = await sb.auth.getSession();
+  await fetch('/api/notify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${data.session?.access_token}` },
+    body: JSON.stringify({ orderId, kind }),
+  }).catch(() => {});
+}
+
+export function useAuth() {
+  const [session, setSession] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
+  useEffect(() => {
+    sb.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data } = sb.auth.onAuthStateChange((_e, s) => setSession(s));
+    return () => data.subscription.unsubscribe();
+  }, []);
+  useEffect(() => {
+    if (!session) { setProfile(null); return; }
+    sb.from('profiles').select('*').eq('id', session.user.id).maybeSingle().then(({ data }) => setProfile(data));
+  }, [session?.user.id]);
+  return { session, profile };
+}
