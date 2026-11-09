@@ -4,9 +4,13 @@ import App from './App';
 import { Auth } from './pages/Auth';
 import { Shop } from './pages/Shop';
 import { Admin } from './pages/Admin';
-import { sb, useAuth } from './lib/app';
+import { configured, sb, useAuth } from './lib/app';
 
 export default function AppShell() {
+  if (!configured) {
+    return <div className="p-8">Missing VITE_SUPABASE_URL</div>;
+  }
+
   const auth = useAuth();
   const [dark, setDark] = useState(() => localStorage.getItem('visor-theme') === 'dark');
   const [route, setRoute] = useState(location.hash.slice(1) || 'home');
@@ -15,6 +19,7 @@ export default function AppShell() {
     document.documentElement.classList.toggle('dark', dark);
     localStorage.setItem('visor-theme', dark ? 'dark' : 'light');
   }, [dark]);
+
   useEffect(() => {
     const h = () => setRoute(location.hash.slice(1) || 'home');
     addEventListener('hashchange', h);
