@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { sb, card, inp, btn } from '../lib/app';
+import { sb, inp, btn } from '../lib/app';
 
 const FIELDS = [
   ['first_name', 'First name'], ['last_name', 'Last name'], ['phone', 'Phone number', 'tel'],
