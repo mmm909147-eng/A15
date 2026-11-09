@@ -7,10 +7,6 @@ import { Admin } from './pages/Admin';
 import { configured, sb, useAuth } from './lib/app';
 
 export default function AppShell() {
-  if (!configured) {
-    return <div className="p-8">Missing VITE_SUPABASE_URL</div>;
-  }
-
   const auth = useAuth();
   const [dark, setDark] = useState(() => localStorage.getItem('visor-theme') === 'dark');
   const [route, setRoute] = useState(location.hash.slice(1) || 'home');
@@ -25,6 +21,10 @@ export default function AppShell() {
     addEventListener('hashchange', h);
     return () => removeEventListener('hashchange', h);
   }, []);
+
+  if (!configured) {
+    return <div className="p-8">Missing VITE_SUPABASE_URL</div>;
+  }
 
   const link = 'text-sm font-medium hover:underline';
   return (
